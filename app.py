@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import tensorflow as tf
 import numpy as np
@@ -13,6 +11,7 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+
 .stApp {
     background:
         radial-gradient(circle at 10% 20%, rgba(76,175,80,0.12), transparent 25%),
@@ -51,13 +50,21 @@ st.markdown("""
 }
 
 @keyframes floatOne {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(60px); }
+    0%,100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(60px);
+    }
 }
 
 @keyframes floatTwo {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-70px); }
+    0%,100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-70px);
+    }
 }
 
 .hero {
@@ -71,8 +78,12 @@ st.markdown("""
 }
 
 @keyframes bounce {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%,100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .main-title {
@@ -104,9 +115,15 @@ st.markdown("""
 }
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(76,175,80,0.3); }
-    70% { box-shadow: 0 0 0 10px rgba(76,175,80,0); }
-    100% { box-shadow: 0 0 0 0 rgba(76,175,80,0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(76,175,80,0.3);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(76,175,80,0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(76,175,80,0);
+    }
 }
 
 .upload-card {
@@ -138,7 +155,11 @@ st.markdown("""
 }
 
 .result-card {
-    background: linear-gradient(135deg,rgba(28,55,37,0.95),rgba(14,30,21,0.95));
+    background: linear-gradient(
+        135deg,
+        rgba(28,55,37,0.95),
+        rgba(14,30,21,0.95)
+    );
     border-radius: 20px;
     padding: 25px;
     margin-top: 25px;
@@ -196,7 +217,9 @@ st.markdown("""
 }
 
 @keyframes progressAnimation {
-    from { width: 0%; }
+    from {
+        width: 0%;
+    }
 }
 
 .info-card {
@@ -236,12 +259,15 @@ st.markdown("""
 label {
     color: #dce8df !important;
 }
+
 </style>
 """, unsafe_allow_html=True)
+
 
 @st.cache_resource
 def load_model():
     return tf.keras.models.load_model("model/1.keras")
+
 
 model = load_model()
 
@@ -251,23 +277,42 @@ class_names = [
     "Potato___healthy"
 ]
 
+
 st.markdown("""
 <div class="hero">
+
     <div class="logo">🥔</div>
-    <div class="ai-badge">✨ AI POWERED PLANT HEALTH DETECTION</div>
-    <div class="main-title">Potato Leaf AI Scanner</div>
-    <div class="subtitle">Detect potato leaf diseases using Deep Learning</div>
+
+    <div class="ai-badge">
+        ✨ AI POWERED PLANT HEALTH DETECTION
+    </div>
+
+    <div class="main-title">
+        Potato Leaf AI Scanner
+    </div>
+
+    <div class="subtitle">
+        Detect potato leaf diseases using Deep Learning
+    </div>
+
 </div>
 """, unsafe_allow_html=True)
 
+
 st.markdown("""
 <div class="upload-card">
-    <h3 style="color:white; margin-bottom:5px;">📸 Upload Your Leaf</h3>
+
+    <h3 style="color:white; margin-bottom:5px;">
+        📸 Upload Your Leaf
+    </h3>
+
     <p style="color:#9eada3;">
         Upload a clear image of a potato leaf and let the AI analyze it.
     </p>
+
 </div>
 """, unsafe_allow_html=True)
+
 
 uploaded_file = st.file_uploader(
     "Choose a leaf image",
@@ -275,12 +320,17 @@ uploaded_file = st.file_uploader(
     label_visibility="collapsed"
 )
 
+
 if uploaded_file is not None:
 
     image = Image.open(uploaded_file).convert("RGB")
 
     st.markdown(
-        "<p style='color:#9eada3; margin-top:20px;'>🔍 Uploaded Image</p>",
+        """
+        <p style="color:#9eada3; margin-top:20px;">
+            🔍 Uploaded Image
+        </p>
+        """,
         unsafe_allow_html=True
     )
 
@@ -291,14 +341,25 @@ if uploaded_file is not None:
     )
 
     img = image.resize((256, 256))
-    img_array = np.expand_dims(np.array(img), axis=0)
+
+    img_array = np.array(img)
+
+    img_array = np.expand_dims(img_array, axis=0)
 
     with st.spinner("🧠 AI is analyzing the leaf..."):
-        prediction = model.predict(img_array, verbose=0)
+
+        prediction = model.predict(
+            img_array,
+            verbose=0
+        )
 
     predicted_index = np.argmax(prediction[0])
+
     predicted_class = class_names[predicted_index]
-    confidence = float(np.max(prediction[0]) * 100)
+
+    confidence = float(
+        np.max(prediction[0]) * 100
+    )
 
     label = (
         predicted_class
@@ -307,9 +368,12 @@ if uploaded_file is not None:
         .title()
     )
 
+
     if "healthy" in predicted_class.lower():
+
         icon = "🌿"
         status = "Healthy Leaf"
+
         message = """
         The leaf appears healthy according to the model.
         Continue maintaining proper irrigation, nutrition,
@@ -317,8 +381,10 @@ if uploaded_file is not None:
         """
 
     elif "early" in predicted_class.lower():
+
         icon = "🍂"
         status = "Early Blight Detected"
+
         message = """
         Early blight symptoms may appear as dark spots
         and concentric rings on the leaf. Consider
@@ -326,93 +392,124 @@ if uploaded_file is not None:
         """
 
     else:
+
         icon = "⚠️"
         status = "Late Blight Detected"
+
         message = """
         Late blight can spread rapidly under favorable
         conditions. Inspect the crop carefully and
         consider appropriate plant protection measures.
         """
 
-    st.markdown(f"""
-    <div class="result-card">
 
-        <div class="diagnosis-title">
-            🤖 AI Diagnosis
+    st.markdown(
+        f"""
+        <div class="result-card">
+
+            <div class="diagnosis-title">
+                🤖 AI Diagnosis
+            </div>
+
+            <div class="diagnosis">
+                {icon} {label}
+            </div>
+
+            <div class="confidence-text">
+                Model Confidence: <b>{confidence:.2f}%</b>
+            </div>
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar"
+                    style="width:{confidence}%;">
+                </div>
+
+            </div>
+
+            <div style="
+                margin-top:15px;
+                color:#9eada3;
+                font-size:0.9rem;
+            ">
+
+                Status:
+
+                <b style="color:#8cff9b;">
+                    {status}
+                </b>
+
+            </div>
+
         </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-        <div class="diagnosis">
-            {icon} {label}
+
+    st.markdown(
+        f"""
+        <div class="info-card">
+
+            <div class="info-title">
+                💡 About This Result
+            </div>
+
+            <div class="info-text">
+                {message}
+            </div>
+
         </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-        <div class="confidence-text">
-            Model Confidence: <b>{confidence:.2f}%</b>
-        </div>
 
-        <div class="progress-container">
-            <div class="progress-bar" style="width:{confidence}%;"></div>
-        </div>
-
-        <div style="
-            margin-top:15px;
-            color:#9eada3;
-            font-size:0.9rem;
-        ">
-            Status:
-            <b style="color:#8cff9b;">
-                {status}
-            </b>
-        </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown(f"""
+st.markdown(
+    """
     <div class="info-card">
 
         <div class="info-title">
-            💡 About This Result
+            🧠 How It Works
         </div>
 
         <div class="info-text">
-            {message}
+
+            <b>1️⃣ Upload</b> — Provide a potato leaf image.
+            <br><br>
+
+            <b>2️⃣ Analyze</b> — The trained CNN model processes
+            the image.
+            <br><br>
+
+            <b>3️⃣ Predict</b> — The model identifies the most
+            likely leaf condition.
+            <br><br>
+
+            <b>4️⃣ Confidence</b> — The model displays its
+            prediction confidence.
+
         </div>
 
     </div>
-    """, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
-st.markdown("""
-<div class="info-card">
 
-    <div class="info-title">
-        🧠 How It Works
-    </div>
+st.markdown(
+    """
+    <div class="footer">
 
-    <div class="info-text">
+        🥔 Potato Leaf AI Scanner
 
-        <b>1️⃣ Upload</b> — Provide a potato leaf image.<br><br>
+        <br>
 
-        <b>2️⃣ Analyze</b> — The trained CNN model processes
-        the image.<br><br>
-
-        <b>3️⃣ Predict</b> — The model identifies the most
-        likely leaf condition.<br><br>
-
-        <b>4️⃣ Confidence</b> — The model displays its
-        prediction confidence.
+        Powered by TensorFlow & Convolutional Neural Networks
 
     </div>
-
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<div class="footer">
-    🥔 Potato Leaf AI Scanner
-    <br>
-    Powered by TensorFlow & Convolutional Neural Networks
-</div>
-""", unsafe_allow_html=True)
-
-
+    """,
+    unsafe_allow_html=True
+)
 
