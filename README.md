@@ -6,8 +6,8 @@ A deep learning-based web application that detects potato leaf diseases using a 
 
 ## 🚀 Live Demo
 
-🌐 **Try the application:**
-https://potato-disease-detection.streamlit.app/
+👉 [🥔 Potato Leaf AI Scanner]
+(https://potato-disease-detector.streamlit.app/)
 
 > If your actual Streamlit URL is different, replace the URL above with your deployed application URL.
 
